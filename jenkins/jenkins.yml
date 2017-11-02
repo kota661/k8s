@@ -1,0 +1,39 @@
+# Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-np-svc
+spec:
+  selector:
+    app: jenkins-app
+  type: NodePort
+  ports:
+   - protocol: TCP
+     port: 8080
+     targetPort: 8080
+     nodePort: 31901
+     protocol: TCP
+
+# Deployment
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jenkins-app
+    spec:
+      containers:
+      - name: jenkins-app
+        image: jenkins
+        # resources:
+        #   requests:
+        #     cpu: 100m
+        #     memory: 100Mi
+        ports:
+        - containerPort: 8080
